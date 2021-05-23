@@ -1,8 +1,8 @@
 class Card
-
   attr_accessor :suit, :rank, :show
-  SUITS = ["Hearts", "Spades", "Clubs", "Diamonds"]
-  RANKS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
+
+  SUITS = %w[Hearts Spades Clubs Diamonds].freeze
+  RANKS = %w[2 3 4 5 6 7 8 9 10 Jack Queen King Ace].freeze
 
   def initialize(suit, rank)
     @show = true
