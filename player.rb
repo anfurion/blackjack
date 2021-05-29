@@ -1,10 +1,19 @@
 class Player
-  attr_reader :balance, :name
+  attr_reader :balance, :name, :hand
 
   def initialize(balance, name)
     @balance = balance
     @name = name
-  end 
+    @hand = []
+  end
+
+  def take_card(card)
+    @hand << card
+  end
+
+  def drop_cards
+    @hand = []
+  end
 
   def won(amount)
     @balance += amount
