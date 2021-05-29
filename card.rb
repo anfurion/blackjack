@@ -1,17 +1,32 @@
 class Card
-  attr_accessor :suit, :rank, :show
+  ICON_ORDERS = {
+    jack: 11,
+    queen: 12,
+    king: 13,
+    ace: 14
+  }.freeze
 
-  SUITS = %w[Hearts Spades Clubs Diamonds].freeze
-  RANKS = %w[2 3 4 5 6 7 8 9 10 Jack Queen King Ace].freeze
+  SUITS = %i[hearts spades clubs diamonds].freeze
+  NUMERIC_RANKS = (2..10).freeze
+  ICON_RANKS = %i[jack queen king ace].freeze
 
-  def initialize(suit, rank)
-    @show = true
-    if SUITS.include?(suit) && RANKS.include?(rank)
-      @suit = suit
-      @rank = rank
+  attr_reader :suit, :rank, :show, :order
+
+  def initialize(suit, rank, show = true)
+    validate!(suit, rank)
+    @suit = suit
+    @rank = rank
+    @show = show
+    @order = determine_order(rank)
+  end
+
+  def value(points)
+    if order == 14
+      points < 11 ? 11 : 1
+    elsif order > 10
+      10
     else
-      @suit = 'UNKNOWN'
-      @rank = 'UNKNOWN'
+      order
     end
   end
 
@@ -20,6 +35,28 @@ class Card
       "#{rank} of #{suit}."
     else
       'Card is face down right now'
+    end
+  end
+
+  def determine_order(rank)
+    ICON_ORDERS[rank] || rank
+  end
+
+  private
+
+  def validate!(suit, rank)
+    raise ArgumentError unless suit_valid?(suit) && rank_valid?(rank)
+  end
+
+  def suit_valid?(suit)
+    SUITS.include?(suit)
+  end
+
+  def rank_valid?(rank)
+    if rank.is_a? Integer
+      NUMERIC_RANKS.include? rank
+    else
+      ICON_RANKS.include?(rank)
     end
   end
 end

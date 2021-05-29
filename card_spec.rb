@@ -1,36 +1,96 @@
 require_relative 'card'
 
 RSpec.describe Card do
-  before do
-    suit = 'Hearts'
-    rank = '8'
+  subject { Card.new(suit, rank, show) }
+  let(:suit) { :clubs }
+  let(:rank) { :jack }
+  let(:show) { true }
 
-    @card = Card.new suit, rank
+  describe 'values of cards' do
+    context 'when card is numeric' do
+      let(:rank) { 3 }
+
+      it 'when points above 11' do
+        expect(subject.value(13)).to eq(3)
+      end
+
+      it 'when points below 11' do
+        expect(subject.value(7)).to eq(3)
+      end
+    end
+
+    context 'when card is icon' do
+      let(:rank) { :king }
+
+      it 'when points above 11' do
+        expect(subject.value(13)).to eq(10)
+      end
+
+      it 'when points below 11' do
+        expect(subject.value(7)).to eq(10)
+      end
+    end
+
+    context 'when card is ace' do
+      let(:rank) { :ace }
+
+      it 'when points above 11' do
+        expect(subject.value(13)).to eq(1)
+      end
+
+      it 'when points is equal 11' do
+        expect(subject.value(11)).to eq(1)
+      end
+
+      it 'when points below 11' do
+        expect(subject.value(7)).to eq(11)
+      end
+    end
   end
 
-  it 'should respond to suit' do
-    expect(@card).to respond_to(:suit)
+  it 'valdates suit and rank on initialize' do
+    expect { Card.new('black', 'joker') }.to raise_error(ArgumentError)
   end
-  it 'should respond to rank' do
-    expect(@card).to respond_to(:rank)
+
+  it 'knows a suit' do
+    expect(subject.suit).to eq(suit)
   end
-  it 'should respond to show' do
-    expect(@card).to respond_to(:show)
+
+  it 'knows a rank' do
+    expect(subject.rank).to eq(rank)
   end
-  it 'should return hearts for suit' do
-    expect(@card.suit).to eq('Hearts')
+
+  context 'can determine_order by rank' do
+    it 'can determine_order of icons' do
+      expect(subject.determine_order(:king)).to eq(13)
+    end
+
+    it 'can determine_order of numbers' do
+      expect(subject.determine_order(7)).to eq(7)
+    end
   end
-  it 'should return 8 for rank' do
-    expect(@card.rank).to eq('8')
+
+  it 'knows an order' do
+    expect(subject.order).to eq(11)
   end
-  it 'should return true for show' do
-    expect(@card.show).to eq(true)
-  end
-  it 'should return the suit rank if show is true' do
-    expect("#{@card}").to eq("#{@card.rank} of #{@card.suit}.")
-  end
-  it 'should not return the suit rank if show is false' do
-    @card.show = false
-    expect("#{@card}").to eq("Card is face down right now")
+
+  describe 'what we see when look on card' do
+    context 'when card face is up' do
+      it 'should return true for show' do
+        expect(subject.show).to eq(true)
+      end
+
+      it 'should return the suit rank if show is true' do
+        expect(subject.to_s).to eq("#{subject.rank} of #{subject.suit}.")
+      end
+    end
+
+    context 'when card is face down' do
+      let(:show) { false }
+
+      it 'should not return the suit rank if show is false' do
+        expect(subject.to_s).to eq('Card is face down right now')
+      end
+    end
   end
 end
