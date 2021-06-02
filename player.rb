@@ -7,6 +7,14 @@ class Player
     @hand = []
   end
 
+  def points
+    total = 0
+    hand
+      .sort { |a, b| a.order <=> b.order }
+      .each { |card| total += card.value(total) }
+    total
+  end
+
   def take_card(card)
     @hand << card
   end

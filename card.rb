@@ -45,7 +45,8 @@ class Card
   private
 
   def validate!(suit, rank)
-    raise ArgumentError unless suit_valid?(suit) && rank_valid?(rank)
+    raise ArgumentError, "#{suit} not included in #{SUITS}" unless suit_valid?(suit)
+    raise ArgumentError, "#{rank} not included in #{NUMERIC_RANKS} and #{ICON_RANKS}" unless rank_valid?(rank)
   end
 
   def suit_valid?(suit)

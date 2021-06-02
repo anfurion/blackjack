@@ -3,8 +3,8 @@ require_relative 'card'
 class Deck
   attr_reader :cards
 
-  SUITS = %w[Hearts Spades Clubs Diamonds].freeze
-  RANKS = %w[2 3 4 5 6 7 8 9 10 Jack Queen King Ace].freeze
+  SUITS = %i[hearts spades clubs diamonds].freeze
+  RANKS = (2..10).to_a + %i[jack queen king ace]
   # RANKS = %w[Jack Queen King Ace].freeze
 
   def initialize
@@ -25,7 +25,7 @@ class Deck
   def create_cards
     SUITS.each do |suit|
       RANKS.each do |rank|
-        @cards.push(Card.new(suit, rank))
+        @cards << Card.new(suit, rank)
       end
     end
   end
