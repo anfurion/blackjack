@@ -10,13 +10,12 @@ class Card
   NUMERIC_RANKS = (2..10).freeze
   ICON_RANKS = %i[jack queen king ace].freeze
 
-  attr_reader :suit, :rank, :show, :order
+  attr_reader :suit, :rank, :order
 
-  def initialize(suit, rank, show = true)
+  def initialize(suit, rank) 
     validate!(suit, rank)
     @suit = suit
     @rank = rank
-    @show = show
     @order = determine_order(rank)
   end
 
@@ -30,12 +29,8 @@ class Card
     end
   end
 
-  def to_s
-    if show
-      "#{rank} of #{suit}."
-    else
-      'Card is face down right now'
-    end
+  def face
+    "#{suit} #{rank}"
   end
 
   def determine_order(rank)

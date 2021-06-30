@@ -12,10 +12,6 @@ class Deck
     create_cards
   end
 
-  def shuffle
-    @cards.shuffle!
-  end
-
   def deal_card
     @cards.pop
   end
@@ -28,5 +24,6 @@ class Deck
         @cards << Card.new(suit, rank)
       end
     end
+    @cards.shuffle!
   end
 end

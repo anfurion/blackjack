@@ -18,7 +18,7 @@ class Player
   def take_card(card)
     @hand << card
   end
-
+  
   def drop_cards
     @hand = []
   end
@@ -27,7 +27,7 @@ class Player
     @balance += amount
   end
 
-  def lose(amount)
+  def bet(amount)
     @balance -= amount
   end
 end

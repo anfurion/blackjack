@@ -22,6 +22,6 @@ class Party
 
   def additional_cards
     dealer.take_card(deck.deal_card) if dealer.want_card?
-    gambler.take_card(deck.deal_card) if dealer.want_card?
+    gambler.take_card(deck.deal_card) if gambler.want_card?
   end
 end

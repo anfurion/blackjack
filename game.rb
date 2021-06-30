@@ -10,11 +10,27 @@ class Game
 
   def new_round
     place_bets
-    party = Party.new(dealer, gambler)
-    party.play!
-    party.winner.won(bank)
-    @bank = 0
+    @deck = Deck.new
+    deal_cards
   end
+
+  def play!
+    deal_cards
+    additional_cards
+  end
+
+  def deal_cards
+    2.times do
+      gambler.take_card(deck.deal_card)
+      dealer.take_card(deck.deal_card)
+    end
+  end
+
+  def additional_cards
+    dealer.take_card(deck.deal_card) if dealer.want_card?
+    gambler.take_card(deck.deal_card) if gambler.want_card?
+  end
+end
 
   private
 
@@ -24,4 +40,3 @@ class Game
     dealer.bet(bet_amount)
     @bank += bet_amount
   end
-end
