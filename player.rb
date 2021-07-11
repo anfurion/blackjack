@@ -17,6 +17,7 @@ class Player
 
   def take_card(card)
     @hand << card
+    card
   end
   
   def drop_cards
