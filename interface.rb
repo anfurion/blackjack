@@ -10,16 +10,39 @@ class Interface
     @game.new_round
     show_info
     step
-    finish
+  end
+
+  def winner
+    gambler = @game.gambler
+    gambler_points = @game.gambler.points
+    dealer = @game.dealer
+    dealer_points = @game.dealer.points
+    if gambler_points == dealer_points
+      puts 'ничья'
+      puts 'возвращаем ставку игроку'
+      puts 'возвращаем ставку дилеру'
+      @game.return_bets
+    elsif dealer_points > 21
+      puts 'дилер проиграл'
+      @game.winner_bet(gambler)
+    elsif gambler_points > 21
+      puts 'игрок проиграл'
+      @game.winner_bet(dealer)
+    elsif gambler_points > dealer_points
+      puts 'игрок выиграл'
+      @game.winner_bet(gambler)
+    elsif gambler_points < dealer_points
+      puts 'дилер выиграл'
+      @game.winner_bet(dealer)
+    end
   end
 
   def show_info
     puts 'Информация'
     puts "Карты игрока: #{@game.gambler.hand.map(&:face)}"
-    puts "У вас осталось #{@game.gambler.balance}"
-    puts "У дилера осталось #{@game.dealer.balance}"
-    # 1. Вывод карт игрока. 2. Баланс и имя обоих игроков. 3. Карты дилера не видет игрок.
-    # end
+    puts "У вас сейчас #{@game.gambler.points} очков"
+    puts "У вас осталось $#{@game.gambler.balance}"
+    puts "У дилера осталось $#{@game.dealer.balance}"
 
     @game.gambler
   end
@@ -31,8 +54,13 @@ class Interface
     choice = gets.chomp.to_i
     case choice
     when 1
-      card = @game.gambler.take_card(@game.deck.deal_card)
-      puts "Вы взяли еще 1 карту #{card.face}"
+      if @game.gambler.hand.count < 3
+        card = @game.gambler.take_card(@game.deck.deal_card)
+        puts "Вы взяли еще 1 карту #{card.face}"
+        show_info
+      else
+        puts 'У вас уже есть 3 карты, нельзя брать больше'
+      end
       dealer_step
       step
     when 2
@@ -43,24 +71,25 @@ class Interface
     end
   end
 
+  def open_cards
+    puts "Карты игрока: #{@game.gambler.hand.map(&:face)}"
+    puts "Карты дилера: #{@game.dealer.hand.map(&:face)}"
+    winner
+    puts "У вас осталось #{@game.gambler.balance}"
+    puts "У дилера осталось #{@game.dealer.balance}"
+    another_game
+  end
+
   def another_game
     puts 'Сыграть еще раз? (y/n)'
     choice = gets.chomp
     if choice == 'y'
+      puts 'Сыграем еще раз!'
       new_game
       step
     else
       puts 'Спасибо за игру!'
     end
-  end
-
-  def open_cards
-    puts "Карты игрока: #{@game.gambler.hand.map(&:face)}"
-    puts "Карты дилера: #{@game.dealer.hand.map(&:face)}"
-    @game.count_points
-    puts "У вас осталось #{@game.gambler.balance}"
-    puts "У дилера осталось #{@game.dealer.balance}"
-    another_game
   end
 
   def dealer_step

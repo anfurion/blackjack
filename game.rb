@@ -8,27 +8,6 @@ class Game
     @bet_amount = 10
   end
 
-  def count_points
-    gambler_points = gambler.points
-    dealer_points = dealer.points
-    if dealer_points > 21
-      puts 'дилер проиграл'
-      winner_bet(gambler)
-    elsif gambler_points > 21
-      puts 'игрок проиграл'
-      winner_bet(dealer)
-    elsif gambler_points > dealer_points
-      puts 'игрок выиграл'
-      winner_bet(gambler)
-    elsif gambler_points < dealer_points
-      puts 'дилер выиграл'
-      winner_bet(dealer)
-    else gambler_points == dealer_points
-         puts 'ничья'
-         return_bets
-    end
-  end
-
   def winner_bet(winner)
     @bank -= 20
     winner.won(20)
@@ -36,9 +15,7 @@ class Game
 
   def return_bets
     @bank -= 20
-    puts 'возвращаем ставку игроку'
     gambler.won(10)
-    puts 'возвращаем ставку дилеру'
     dealer.won(10)
   end
 
@@ -66,13 +43,13 @@ class Game
     dealer.take_card(deck.deal_card) if dealer.want_card?
     gambler.take_card(deck.deal_card) if gambler.want_card?
   end
-end
 
   private
 
-def place_bets
-  gambler.bet(bet_amount)
-  @bank += bet_amount
-  dealer.bet(bet_amount)
-  @bank += bet_amount
+  def place_bets
+    gambler.bet(bet_amount)
+    @bank += bet_amount
+    dealer.bet(bet_amount)
+    @bank += bet_amount
+  end
 end

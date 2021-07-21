@@ -54,8 +54,8 @@ RSpec.describe Player do
       .from(100).to(110)
   end
 
-  it 'after lose balance decreases by amount' do
-    expect { subject.lose(amount) }
+  it 'after bet placed balance decreases by amount' do
+    expect { subject.bet(amount) }
       .to change { subject.balance }
       .from(100).to(90)
   end
